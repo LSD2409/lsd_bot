@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 *.iml
-
+.idea/
 docker-compose.yaml
 Dockerfile

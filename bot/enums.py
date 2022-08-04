@@ -2,4 +2,5 @@ import enum
 
 
 class BotCommands(enum.Enum):
-    COMPLIMENT = "Скажи что-нибудь на приятном"
+    COMPLIMENT = 'Say something nice'
+    POETRY = 'Poetry'

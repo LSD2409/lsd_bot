@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/opt/project
+    ports:
+      - "8005:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "15433:5432"

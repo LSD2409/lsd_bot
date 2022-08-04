@@ -10,5 +10,6 @@ router = APIRouter()
 async def webhook(body=Body(...)):
     bot = await get_bot()
     updates = types.Update.de_json(body)
+    print('q')
     bot.process_new_updates([updates])
     return 200

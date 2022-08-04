@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Enum, DateTime, func
 from sqlalchemy.orm import relationship
 
 from .enums import ContentType
@@ -12,28 +12,20 @@ class Content(Base):
     __tablename__ = 'content'
 
     id = Column(Integer, primary_key=True, index=True)
-    content_type = Column(String, nullable=False)
+    content_type = Column(Enum(ContentType), nullable=False, default=ContentType.COMPLIMENT.value)
+    content = Column(Text, nullable=False)
 
     content_consume = relationship('ContentConsume', back_populates='content')
 
 
 class ContentConsume(Base):
 
-    __table__ = 'content_consume'
+    __tablename__ = 'content_consume'
 
     id = Column(Integer, primary_key=True, index=True)
     content_id = Column(Integer, nullable=False)
     chat_id = Column(ForeignKey(chat_models.Chat.id), index=True)
+    watched_at = Column(DateTime, server_default=func.now())
 
     chat = relationship(chat_models.Chat, back_populates='content_consume')
     content = relationship(Content, back_populates='content_consume')
-
-
-class Compliment(Content):
-
-    __tablename__ = 'compliments'
-
-    content_type = ContentType.COMPLIMENT.value
-
-    id = Column(Integer, ForeignKey("content.id"), primary_key=True)
-    text = Column(String, nullable=False)
