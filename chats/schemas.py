@@ -26,7 +26,7 @@ class ChatMessageBase(BaseModel):
 
 
 class ChatMessageCreate(ChatMessageBase):
-    chat_id: int
+    chat_id: int | None = None
 
 
 class ChatMessage(ChatMessageBase):

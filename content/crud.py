@@ -1,6 +1,8 @@
 from . import models, schemas
 from sqlalchemy.orm import Session
 
+from chats import crud as chat_crud
+
 
 def create_content(db: Session, content: schemas.ContentCreate) -> models.Content:
     content = models.Content(**content.dict())
@@ -19,12 +21,12 @@ def create_content_consume(db: Session, content_consume: schemas.ContentConsumeC
 
 
 def get_not_consumed_content(db: Session, not_consumed_content: schemas.NotConsumedContent) -> models.Content:
-    consumed_content_id = db.query(models.ContentConsume)\
-        .filter(
-        models.ContentConsume.chat_id == not_consumed_content.chat.chat_id,
-        models.ContentConsume.content_type == not_consumed_content.content_type
-    )\
-        .values(models.ContentConsume.content_id)
+    chat = chat_crud.get_chat(db, not_consumed_content.chat_id)
+    consumed_content_id = [
+        q.content_id for q in
+        db.query(models.ContentConsume).filter(
+            models.ContentConsume.chat_id == chat.id)
+    ]
 
     content = db.query(models.Content)\
         .filter(
@@ -32,5 +34,12 @@ def get_not_consumed_content(db: Session, not_consumed_content: schemas.NotConsu
         models.Content.content_type == not_consumed_content.content_type
     ).\
         order_by(models.Content.id).first()
+
+    create_content_consume(
+        db, schemas.ContentConsumeCreate(
+            chat_id=chat.id,
+            content_id=content.id
+        )
+    )
 
     return content

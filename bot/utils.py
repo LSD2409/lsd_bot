@@ -5,12 +5,27 @@ from .enums import BotCommands
 
 from content.manager import ContentManager
 
+from chats import crud as chat_crud
+from chats import schemas as chat_schemas
+
 bot = None
 
 
 async def initialize_bot_function(_bot: telebot.TeleBot) -> None:
     @_bot.message_handler(commands=['start'])
     def start_message(message):
+
+        db = get_db()
+        chat_crud.create_chat_message(
+            db,
+            chat_schemas.ChatMessageCreate(
+                text=message.text,
+                chat_id=message.chat.id,
+        )
+        )
+
+        db.close()
+
         markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
 
         for command in BotCommands:
@@ -23,9 +38,17 @@ async def initialize_bot_function(_bot: telebot.TeleBot) -> None:
     @_bot.message_handler(content_types=["text"])
     def handle_text(message):
         db = get_db()
+        chat_crud.create_chat_message(
+            db,
+            chat_schemas.ChatMessageCreate(
+                text=message.text,
+                chat_id=message.chat.id,
+            )
+        )
+
         manager = ContentManager(message.chat.id, db)
 
-        content = manager.get_content(message.text, message.chat.id)
+        content = manager.get_content(BotCommands(message.text).name, message.chat.id)
 
         _bot.send_message(message.chat.id, content)
 

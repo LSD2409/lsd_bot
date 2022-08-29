@@ -17,10 +17,10 @@ def create_chat(db: Session, chat: schemas.ChatCreate) -> models.Chat:
 def create_chat_message(db: Session, message: schemas.ChatMessageCreate) -> models.ChatMessage:
 
     chat = get_chat(db, message.chat_id)
-    if chat is None:
+    if chat is None is None:
         create_chat(db, schemas.ChatCreate(chat_id=message.chat_id))
 
-    chat_message = models.ChatMessage(**message.dict())
+    chat_message = models.ChatMessage(chat_id=chat.id, text=message.text)
 
     db.add(chat_message)
     db.commit()

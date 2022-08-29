@@ -14,7 +14,3 @@ class Base:
     @declared_attr
     def __tablename__(cls) -> str:
         return cls.__name__.lower()
-
-
-Base.metadata.drop_all(bind=engine)
-Base.metadata.create_all(bind=engine)

@@ -11,8 +11,8 @@ class Chat(Base):
     chat_id = Column(Integer, index=True)
     last_message_at = Column(DateTime, server_default=func.now())
 
-    messages = relationship('Message', back_populates='chat')
-    consumed_content = relationship('ContentConsume', back_populates='chat')
+    messages = relationship('ChatMessage', back_populates='chat')
+    content_consumed = relationship('ContentConsume', back_populates='chat')
 
 
 class ChatMessage(Base):

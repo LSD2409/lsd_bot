@@ -43,7 +43,7 @@ class ContentConsume(ContentConsumeBase):
 
 class NotConsumedContent(BaseModel):
     content_type: str
-    chat: chats_schemas.Chat
+    chat_id: int
 
     class Config:
         orm_mode = True

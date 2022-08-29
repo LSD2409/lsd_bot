@@ -25,7 +25,6 @@ prompt-toolkit==3.0.30
 pydantic==1.9.1
 pyTelegramBotAPI==4.6.1
 python-dateutil==2.8.2
-python-dotenv==0.20.0
 python-multipart==0.0.5
 python-slugify==6.1.2
 PyYAML==6.0
@@ -47,3 +46,5 @@ watchgod==0.8.2
 wcwidth==0.2.5
 websockets==10.3
 psycopg2==2.9.3
+python-dotenv==0.20.0
+alembic==1.8.1
